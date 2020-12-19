@@ -1,86 +1,85 @@
-import React, { useEffect, useState } from "react";
+import React, {useState} from "react";
+import {useHistory} from "react-router-dom"
 
-
-
-
- function Form(props) {
-  const { formValues, change, submit, Disabled } = props;
-  return (
-    <div>
-        <form onSubmit={onSubmit}>
+const Form = (props) => {
+    let history = useHistory()
+    const [form, setForm] = useState({
+        name: ''
+    })
+    const handleCheckbox = (event) => {
+        setForm({
+            ...form,
+            [event.target.name]: event.target.checked
+        })
+    }
+    const handleForm = (event) => {
+        setForm({
+            ...form,
+            [event.target.name]: event.target.value
+        })
+    }
+    return (
         <div>
-            <div>{formErrors.name}</div>
-            <div>{formErrors.pizzaSize}</div>
-        </div>
-        <label>
-            Name:
-            <input 
-            value={form.name}
-            onChange={onChange}
-            name='name'
-            type='text'
-            />
-        </label>
-        <label>
-            Pizza Size:
-            <select id='size' onChange={onChange} value={form.pizzaSize} name='pizzaSize'>
-                <option value=''>==Select a size</option>
-                <option value='large'>Large</option>
-                <option value='medium'>medium</option>
-                <option value='small'>small</option>
-            </select>
-        </label>
-        <label>
-            Cheese
-            <input
-                type="checkbox"
-                name="cheese"
-                checked={form.cheese}
-                onChange={onChange}
-            />
-        </label>
-        <label>
-            Chicken
-            <input
-                type="checkbox"
-                name="chicken"
-                checked={form.chicken}
-                onChange={onChange}
-            />
-        </label>
+            <h1> Pizza</h1>
+            <form onSubmit={(event) => {
+                event.preventDefault()
+                props.setOrder(form)
+                history.push('/confirmation')
+            }}>
+                <input required onChange={handleForm} value={form.name}
+                    type='text'
+                    min={2}
+                    name='name'
+                    placeholder='Name'
+                    
+                />
+                <select required name="size" placeholder="Select Size" onChange={handleForm}>
+                    <option >________SELECT SIZE________</option>
+                    <option value='small'>Small</option>
+                    <option value='medium'>Medium</option>
+                    <option value='large'>Large</option>
+                    <option value='xLarge'>Extra Large</option>
+                </select>
 
-        <label>
-            Peperoni
-            <input
-                type="checkbox"
-                name="peperoni"
-                checked={form.peperoni}
-                onChange={onChange}
-            />
-        </label>
-        <label>
-            Special Instructions:
-            <input 
-            value={form.text}
-            onChange={onChange}
-            name='text'
-            type='text'
-            />
-        </label>
-        <button id='submit-btn' disabled={disabled}>Order</button>
-        </form>
-        <div>
-            {orders.map(item => 
-             <div key={item.id}>
-                <h1>Name: {item.name}</h1>
-                <p>Special Instructions: {item.text}</p>
-                <p>Size: {item.pizzaSize}</p>
-                <p>Toppings: {item.toppings}</p>
-                <p>Order Date: {item.createdAt}</p>
-             </div>)}
-        </div>
-    </div>
-)
-}
+                <h3>Toppings</h3>
+                <input onChange={handleCheckbox}
+                    type='checkbox'
+                    name='pepperoni'
+                    value='pepperoni'
+                    checked={form.pepperoni ===true}
+                />
+                <label htmlFor='pepperoni'>Pepperoni</label>
+                <input onChange={handleCheckbox}
+                    type='checkbox'
+                    name='beef'
+                    value='beef'
+                    checked={form.beef === true}
+                />
+                <label htmlFor='Beef'>Beef</label>
+                <input onChange={handleCheckbox}
+                    type='checkbox'
+                    name='veggie'
+                    value='veggie'
+                    checked={form.veggie === true}
+                />
+                <label htmlFor='veggie'>Veggie</label>
+                <input onChange={handleCheckbox}
+                    type='checkbox'
+                    name='chicken'
+                    value='chicken'
+                    checked={form.chicken === true}
+                />
+                <label htmlFor='chicken'>Chicken</label>
 
-export default Form
+                <h3>Special Instructions</h3>
+                <input  onChange={handleForm}
+                    type='text'
+                    name='instructions' 
+                    placeholder='Instructions'
+                />
+                <button>Submit Order</button>
+            </form>
+        </div>
+    );
+};
+export default Form; 

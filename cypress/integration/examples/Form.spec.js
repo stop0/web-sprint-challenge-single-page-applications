@@ -1,0 +1,26 @@
+describe(' Pizza Form', () => {
+    it('Name Input', () => {
+        cy.visit("http://localhost:3000/pizza")
+        cy.get('form input:first').type('some text')
+        cy.get('form input:first').should('have.value', 'some text')
+    })
+    it('Multiple Toppings Check', () => {
+        cy.visit("http://localhost:3000/pizza")
+        cy.get('form input:nth-of-type(2)').check()
+        cy.get('form input:nth-of-type(2)').should('be.checked')
+        cy.get('form input:nth-of-type(3)').check()
+        cy.get('form input:nth-of-type(3)').should('be.checked')
+        cy.get('form input:nth-of-type(4)').check()
+        cy.get('form input:nth-of-type(4)').should('be.checked')
+        cy.get('form input:nth-of-type(5)').check()
+        cy.get('form input:nth-of-type(5)').should('be.checked')
+        cy.get('form input:nth-of-type(6)').type('some text')
+        cy.get('form input:nth-of-type(6)').should('have.value', 'some text')
+    })
+    it(' Submit Form', () => {
+        cy.visit("http://localhost:3000/pizza")
+        cy.get('form input:first').type('some text')
+        cy.contains('Submit').click()
+        cy.url().should('include', "/confirmation")
+    })
+}) 
